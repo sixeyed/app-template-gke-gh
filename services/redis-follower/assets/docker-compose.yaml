@@ -1,0 +1,10 @@
+version: '3.6'
+
+services:
+
+  redis-follower:
+    image: gcr.io/google_samples/gb-redisslave:v1
+    depends_on:
+      - redis-master
+    deploy:
+      replicas: {{.Parameters.replicas}}

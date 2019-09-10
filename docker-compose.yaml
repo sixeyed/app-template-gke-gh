@@ -1,0 +1,28 @@
+version: "3.6"
+
+services:
+
+  action-gke-scaffold-svc:
+    image: sixeyed/app-template-gke-gh-gke-svc
+    build:
+      context: ./services/action-gke
+
+  github-repo-scaffold-svc:
+    image: sixeyed/app-template-gke-gh-github
+    build:
+      context: ./services/github
+
+  redis-leader-scaffold-svc:
+    image: sixeyed/app-template-gke-gh-redis-leader-svc
+    build:
+      context: ./services/redis-leader
+
+  redis-follower-scaffold-svc:
+    image: sixeyed/app-template-gke-gh-redis-follower-svc
+    build:
+      context: ./services/redis-follower
+
+  guestbook-php-scaffold-svc:
+    image: sixeyed/app-template-gke-gh-guestbook-php-svc
+    build:
+      context: ./services/guestbook-php

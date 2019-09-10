@@ -1,0 +1,137 @@
+apiVersion: v1alpha1
+generated: "2018-06-13T09:24:07.392654524Z"
+kind: RepositoryContent
+services:
+- apiVersion: v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: gha-gke
+    platforms:
+      - linux
+  spec:
+    description: Google Kubernetes Engine
+    icon: https://raw.githubusercontent.com/sixeyed/app-template-gcp/master/img/gke.png
+    source:
+      image: sixeyed/app-template-gke-gh-gke-svc
+    title: GKE
+    parameters:
+    - name: gkeTemplate
+      description: Cluster template
+      type: enum
+      values:
+      - value: "Your first cluster"
+        description: "Your first cluster"
+      - value: "Standard cluster"
+        description: "Standard cluster"
+      - value: "Highly available"
+        description: "Highly available"
+    - name: kubeVersion
+      description: Kubernetes version
+      type: enum
+      values:
+      - value: "1.13.7-gke.8"
+        description: "1.13.7-gke.8"
+      - value: "1.12.8-gke.10"
+        description: "1.12.8-gke.10"
+    - name: nodeCount
+      type: enum
+      values:
+      - value: "2"
+        description: "2"
+      - value: "3"
+        description: "3"
+      - value: "5"
+        description: "5"
+- apiVersion: v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: github
+    platforms:
+      - linux
+  spec:
+    description: Select GitHub repo
+    icon: https://raw.githubusercontent.com/sixeyed/app-template-iot/master/img/github.png
+    source:
+      image: sixeyed/app-template-gke-gh-github
+    title: GitHub repo
+    parameters:
+    - name: username
+      description: Username
+      type: string
+    - name: repoName
+      description: Repository name
+      type: string
+- apiVersion: v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: redis-leader
+    platforms:
+      - linux
+  spec:
+    description: An in-memory data structure store
+    icon: https://raw.githubusercontent.com/sixeyed/app-template-gcp/master/img/redis-leader.png
+    source:
+      image: sixeyed/app-template-gke-gh-redis-leader-svc
+    title: Redis Leader
+- apiVersion: v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: redis-follower
+    platforms:
+      - linux
+  spec:
+    description: Redis replicated followers
+    icon: https://raw.githubusercontent.com/sixeyed/app-template-gcp/master/img/redis-follower.png
+    source:
+      image: sixeyed/app-template-gke-gh-redis-follower-svc
+    title: Redis Follower
+    parameters:
+    - name: replicas
+      description: Replicas
+      type: string
+      defaultValue: "2"
+- apiVersion: v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: guestbook-php
+    platforms:
+      - linux
+  spec:
+    description: Guestbook sample app (PHP)
+    icon: https://raw.githubusercontent.com/sixeyed/app-template-gcp/master/img/php.png
+    source:
+      image: sixeyed/app-template-gke-gh-guestbook-php-svc
+    title: Guestbook
+    parameters:
+    - name: externalPort
+      defaultValue: "8080"
+      description: External port
+      type: hostPort
+    - name: replicas
+      description: Replicas
+      type: string
+      defaultValue: "3"
+templates:
+- apiVersion: v1alpha1
+  kind: ApplicationTemplate
+  metadata:
+    name: gcp-guestbook-php
+    platforms:
+    - linux
+  spec:
+    description: Guestbook sample app running on GKE
+    services:
+    - name: github
+      serviceId: github
+    - name: .github
+      serviceId: gha-gke
+      parameters:
+        kubeVersion: 1.13.7-gke.8
+        nodeCount: 2
+    - name: redis-leader
+      serviceId: redis-leader
+    - name: redis-follower
+      serviceId: redis-follower
+    - name: guestbook-php
+      serviceId: guestbook-php
+    title: Guestbook sample app running on GKE

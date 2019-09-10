@@ -1,0 +1,12 @@
+version: '3.6'
+
+services:
+
+  {{.Name}}:
+    build: {{.Name}}
+    ports:
+      - {{.Parameters.externalPort}}:80
+    depends_on:
+      - redis-master
+    deploy:
+      replicas: {{.Parameters.replicas}}
